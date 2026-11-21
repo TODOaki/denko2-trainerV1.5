@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="ja"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1, viewport-fit=cover" name="viewport"/><title>電工二種 複線図トレーナー v1.9</title><meta content="#101827" name="theme-color"/><style>
+:root{font-family:-apple-system,BlinkMacSystemFont,"Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;color:#182437;background:#eff3f9}*{box-sizing:border-box}body{margin:0}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:default}header{background:#111c31;color:#fff;padding:16px max(16px,calc((100% - 1060px)/2));}header h1{font-size:20px;margin:0 0 6px}header p{font-size:12px;color:#bbc9de;margin:0}main{max-width:1060px;margin:auto;padding:12px 12px 40px}.panel{background:#fff;border:1px solid #d7e0ec;border-radius:14px;padding:13px;margin-bottom:12px;box-shadow:0 1px 4px #1b34500a}.heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}.heading h2{font-size:16px;margin:0}.muted{color:#59687b;font-size:12px}.numbers{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px}.numbers button{border:1px solid #bdcad9;background:#fff;border-radius:9px;padding:10px 0;font-weight:700}.numbers button.active{background:#2454c7;color:white;border-color:#2454c7}.source{min-height:130px;background:#f7f9fc;border:1px dashed #b7c4d5;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:16px;gap:10px}.source img{display:block;max-width:100%;max-height:380px;object-fit:contain}.btn{border:1px solid #bdcad9;border-radius:9px;background:white;padding:9px 11px;color:#15233b;font-size:13px;font-weight:650}.btn.primary{background:#2454c7;border-color:#2454c7;color:white}.btn.warn{color:#a23535}.actions{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:10px}.actions a{font-size:13px;color:#2357bc}.tools{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:10px 0}.swatch{width:39px;height:39px;border-radius:10px;border:2px solid #c9d3df;display:flex;align-items:center;justify-content:center;font-weight:bold;position:relative}.swatch.selected,.btn.selected{outline:3px solid #2a6adc;outline-offset:1px}.swatch.white{background:#fff;color:#1c2939}.swatch.black{background:#161b23;color:#fff}.swatch.red{background:#e23d47;color:#fff}.swatch.green{background:#119b54;color:#fff}.drawbox{border:2px solid #91a1b7;border-radius:12px;overflow:hidden;background:#a9b5c3;position:relative}.drawbox canvas{width:100%;height:410px;display:block;touch-action:none;user-select:none;-webkit-user-select:none;overscroll-behavior:contain;cursor:crosshair}.drawbox.scroll canvas{touch-action:pan-y;cursor:default}.stamp-palette{display:grid;grid-template-columns:repeat(auto-fill,minmax(115px,1fr));gap:7px;margin:10px 0}.stamp-palette button{text-align:center;min-height:45px;font-size:12px}.stamp-palette button.selected{background:#e4edff;border-color:#2454c7;outline:2px solid #2454c7}.stamp-actions{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}.modebar{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin:8px 0}.modebar button.selected{background:#2454c7;color:#fff}.tip{border-left:3px solid #2454c7;padding:7px 10px;background:#f0f5ff;font-size:12px;line-height:1.6}.stamp-actions button:disabled{opacity:.4}.mode{display:flex;gap:8px;align-items:center;font-size:13px}.mode input{height:19px;width:19px}.notice{font-size:12px;color:#5c697e;line-height:1.6}.reference{background:#f7f9fc;padding:12px;border-radius:10px;border:1px dashed #c6d0de;text-align:center}.reference img{max-width:100%;max-height:460px;object-fit:contain}.refhide{display:none}.prompt{width:100%;height:152px;resize:vertical;padding:10px;border:1px solid #c4ccdb;border-radius:9px;font-size:12px;line-height:1.6;color:#21314a}.small{font-size:11px;line-height:1.6;color:#647286}.spacer{flex:1}footer{text-align:center;font-size:11px;color:#6b788a;margin-top:12px}.zoom{max-width:100%;overflow:auto}.hidden{display:none!important}@media(min-width:720px){.numbers{grid-template-columns:repeat(13,minmax(0,1fr))}.drawbox canvas{height:520px}}@media(max-width:380px){.swatch{width:34px;height:36px}.btn{padding:8px}}
+
+/* v1.7: mobile-first layout — reference image directly above drawing area, all tools below */
+.source-head-compact{margin-top:8px;margin-bottom:5px}
+#sourceBox{margin-bottom:7px}
+.source-actions{margin-top:7px}
+.source-tip{margin:5px 0 8px}
+@media(max-width:719px){
+ header{padding:9px 12px}header h1{font-size:17px;margin-bottom:2px}header p{font-size:10px}
+ main{padding:8px 7px 24px}
+ .panel{padding:9px 8px;margin-bottom:8px;border-radius:10px}
+ .heading{margin-bottom:6px}.heading h2{font-size:14px}
+ .numbers{display:flex;gap:5px;overflow-x:auto;scrollbar-width:thin;white-space:nowrap;padding-bottom:4px}
+ .numbers button{flex:0 0 36px;padding:7px 0;border-radius:7px;font-size:13px}
+ #sourceBox{min-height:100px;padding:6px;gap:4px;border-radius:7px}
+ #sourceBox img{max-height:min(25svh,215px);width:auto;max-width:100%;object-fit:contain}
+ .drawbox canvas{height:min(50svh,440px);min-height:270px}
+ .modebar,.tools,.stamp-actions,.actions{gap:5px}
+ .btn{padding:8px 9px;font-size:12px}
+ .source-tip{font-size:10px}
+}
+
+/* v1.9: actions directly adjacent to picker heading */
+.question-heading{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;column-gap:8px;row-gap:6px}.question-heading #qtitle{margin-left:auto}
+.question-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.question-controls .btn{font-size:12px;padding:7px 10px;white-space:nowrap}
+@media(max-width:719px){.question-heading{align-items:flex-start}.question-controls{gap:4px}.question-controls .btn{font-size:11px;padding:6px 7px}}
+</style></head><body><header><h1>⚡ 電工二種 複線図トレーナー</h1><p>令和8年度（2026）候補問題 No.1〜13 ／ 指描き練習・模範解答比較</p></header><main>
+<section class="panel"><div class="heading question-heading"><h2>① 公表問題を選ぶ</h2><div class="question-controls"><label class="btn primary" for="sourceFile" title="選択中の問題の単線図画像を登録">＋ 登録</label><input accept="image/jpeg,image/png,.jpg,.jpeg,.png" class="hidden" id="sourceFile" type="file"/><button class="btn warn" id="removeSource" type="button" title="選択中の問題の単線図画像を削除">✕ 削除</button></div><span class="muted" id="qtitle">No.1</span></div><div class="numbers" id="numbers"></div><p class="small source-tip">※JPEG・PNGのみ、1枚10MB以下。画像を再描画して端末内のブラウザ保存領域に登録します。公開サーバーには送信されません。</p></section>
+
+<section class="panel"><div class="heading"><h2>② 複線図を描く</h2><label class="mode"><input checked="" id="drawMode" type="checkbox"/>操作 ON</label></div><div class="heading source-head-compact"><h2>単線図</h2><span class="muted" id="sourceLabel">No.1</span></div><div class="source" id="sourceBox"><strong>単線図はまだ登録されていません</strong><span class="muted">お手元の単線図画像を登録してください。</span></div><div class="drawbox" id="drawbox"><canvas aria-label="複線図を指で描くホワイトボード" id="canvas"></canvas></div><div class="modebar"><button class="btn primary selected" id="toolDraw">✏️ ペン</button><button class="btn" id="toolPlace">⊕ 記号を置く</button><button class="btn" id="toolMove">✥ 記号を動かす</button></div><div class="tools" id="tools"><button class="swatch black selected" data-color="#161b23" title="黒ペン">黒</button><button class="swatch white" data-color="#ffffff" title="白ペン">白</button><button class="swatch red" data-color="#e23d47" title="赤ペン">赤</button><button class="swatch green" data-color="#119b54" title="緑ペン">緑</button><button class="btn" id="eraser">消しゴム</button><label class="muted">太さ <input id="thickness" max="18" min="2" type="range" value="5"/></label></div><details id="stampDetails"><summary class="btn" style="display:inline-block;cursor:pointer">器具記号パレットを開く／閉じる</summary><p class="notice">「記号を置く」を選び、記号を選択してキャンバスをタップ。移動・回転・削除は「記号を動かす」で行えます。記号は複線図練習用の簡略表現です。BOX・点線円以外は基本1.3倍表示です。スマホでは初期倍率を70%にしており、倍率スライダーで調整できます。大型BOXと点線円は内側に線を描けます。</p><div class="stamp-palette" id="stampPalette"></div></details><div class="tools"><label class="muted">スタンプ表示倍率 <input aria-label="スタンプの表示倍率" id="stampScale" max="130" min="40" step="5" style="width:155px;vertical-align:middle" type="range" value="100"/></label><strong class="muted" id="stampScaleValue">100%</strong><button class="btn" id="stampScaleReset" type="button">標準に戻す</button></div><div class="stamp-actions"><button class="btn" disabled="" id="rotateStamp">↻ 選択記号を90°回転</button><button class="btn warn" disabled="" id="deleteStamp">✕ 選択記号を削除</button><span class="muted" id="selectedStamp">記号未選択</span></div><div class="actions"><button class="btn" disabled="" id="undo">↶ 一つ戻す</button><button class="btn" disabled="" id="redo">↷ やり直す</button><button class="btn warn" id="clear">全消去（線・記号）</button><button class="btn primary" id="savePNG">PNG保存</button></div><p class="notice">操作ONなら指で描画・スタンプ操作、OFFなら画面スクロール。線・スタンプ配置・移動・回転・削除・全消去はUndo・Redo対応。</p><p class="notice" id="saveStatus">問題ごとに線とスタンプを端末内へ自動保存します。別の問題に切り替えても残ります。</p></section>
+<section class="panel"><div class="heading"><h2>③ 模範複線図と比較</h2><button class="btn primary" id="toggleAnswer">模範解答を表示</button></div><div class="refhide" id="answerArea"><div class="reference" id="answerBox"><strong>模範複線図は未登録です</strong><p class="muted">確認済みの模範解答画像を登録してください。</p></div><div class="actions"><label class="btn" for="answerFile">模範複線図を登録</label><input accept="image/jpeg,image/png,.jpg,.jpeg,.png" class="hidden" id="answerFile" type="file"/><button class="btn" id="removeAnswer">登録画像を削除</button><a href="https://eleking.net/k22/k22f-2026/k22f-2026-list.html" rel="noopener noreferrer" target="_blank">2026年度の解説一覧を見る ↗</a></div><p class="small">JPEG・PNGのみ、1枚10MB以下。参考解答は年度と施工条件に注意。外部解説サイトの図を無断転載せず、自分で確認した画像を登録できます。</p></div></section>
+
+<footer>試作版 v1.9 ／ 外部への描画データ送信なし ／ 個人の学習用</footer></main><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),nums=$('numbers'),canvas=$('canvas'),ctx=canvas.getContext('2d'),box=$('drawbox');
+let q=1,color='#161b23',size=5,erasing=false,current=null,pid=null,visibleAnswer=false;
+let mode='draw',stampType='outlet',selectedId=null,drag=null;
+const SCALE_KEY='denkoni-stamp-scale-v16';
+const defaultStampScale=()=>window.innerWidth<720?70:100;
+let stampScalePct=defaultStampScale();
+try{const savedScale=Number(localStorage.getItem(SCALE_KEY));if(savedScale>=40&&savedScale<=130)stampScalePct=savedScale}catch{}
+function stampScale(){return stampScalePct/100}
+function syncStampScale(){ $('stampScale').value=stampScalePct;$('stampScaleValue').textContent=stampScalePct+'%'}
+$('stampScale').addEventListener('input',e=>{stampScalePct=Number(e.target.value);syncStampScale();paint();try{localStorage.setItem(SCALE_KEY,String(stampScalePct))}catch{}});
+$('stampScaleReset').addEventListener('click',()=>{stampScalePct=defaultStampScale();syncStampScale();paint();try{localStorage.setItem(SCALE_KEY,String(stampScalePct))}catch{}});
+syncStampScale();
+const STAMPS=[['outlet','コンセント'],['lamp','ランプレセプタクル'],['ceiling','引掛シーリング（丸形）'],['ceilingSquare','引掛シーリング（角形）'],['switch','片切スイッチ'],['three','3路スイッチ'],['four','4路スイッチ'],['pilot','パイロットランプ'],['timer','タイムスイッチ'],['breaker','配線用遮断器'],['terminal','端子台'],['box','アウトレットボックス'],['joint','接続部（点線円）']];
+// Each problem keeps reversible snapshots so moving, rotation and deletion are undoable too.
+const state=Array.from({length:13},()=>({items:[],undo:[],redo:[]}));
+const KEY='denkoni-draw-2026-v12';
+try{const saved=JSON.parse(localStorage.getItem(KEY)||'null');if(Array.isArray(saved)&&saved.length===13){saved.forEach((v,i)=>{state[i].items=Array.isArray(v.items)?v.items:[];state[i].undo=Array.isArray(v.undo)?v.undo:[];state[i].redo=Array.isArray(v.redo)?v.redo:[]})}else{const legacy=JSON.parse(localStorage.getItem('denkoni-draw-2026-v1')||'null');if(Array.isArray(legacy)&&legacy.length===13)legacy.forEach((v,i)=>{state[i].items=(v.strokes||[]).map(x=>({...x,type:'stroke'}))})}}catch{}
+function snapshot(){return JSON.parse(JSON.stringify(state[q-1].items))}
+function remember(){const s=state[q-1];s.undo.push(snapshot());s.redo=[]}
+function persist(){try{localStorage.setItem(KEY,JSON.stringify(state));$('saveStatus').textContent='✓ 端末内に自動保存しました。'}catch{$('saveStatus').textContent='⚠ 保存容量または設定のため自動保存できません。PNGで保存してください。'}}
+function refresh(){persist();updateButtons();paint()}
+let imgCache={};const imgKey=(type,n)=>type+':'+n;
+function initDB(){return new Promise(resolve=>{if(!('indexedDB'in window))return resolve(null);try{let req=indexedDB.open('denkoni-img-2026',1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('files'))req.result.createObjectStore('files')};req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null)}catch{resolve(null)}})}
+function dbGet(k){return new Promise(resolve=>{if(!db)return resolve(null);try{const r=db.transaction('files','readonly').objectStore('files').get(k);r.onsuccess=()=>resolve(r.result||null);r.onerror=()=>resolve(null)}catch{resolve(null)}})}
+function dbPut(k,v){return new Promise(resolve=>{if(!db)return resolve(false);try{let t=db.transaction('files','readwrite');t.objectStore('files').put(v,k);t.oncomplete=()=>resolve(true);t.onerror=()=>resolve(false)}catch{resolve(false)}})}
+function dbDelete(k){return new Promise(resolve=>{if(!db)return resolve(false);try{let t=db.transaction('files','readwrite');t.objectStore('files').delete(k);t.oncomplete=()=>resolve(true);t.onerror=()=>resolve(false)}catch{resolve(false)}})}
+function imgData(type,n){return dbGet(imgKey(type,n))}
+function setImageContent(el,data,emptyText){el.replaceChildren();if(data){let img=document.createElement('img');img.alt=(el.id==='sourceBox'?'単線図':'模範複線図')+' No.'+q;img.src=data;el.appendChild(img)}else{let st=document.createElement('strong');st.textContent=emptyText;el.appendChild(st);let tx=document.createElement('span');tx.className='muted';tx.textContent='画像を登録すると、この端末内に保存されます。';el.appendChild(tx)}}
+async function showImages(){const now=q;const [s,a]=await Promise.all([imgData('source',q),imgData('answer',q)]);if(now!==q)return;setImageContent($('sourceBox'),s,'単線図はまだ登録されていません');setImageContent($('answerBox'),a,'模範複線図はまだ登録されていません')}
+function choose(n){finishActive();q=n;selectedId=null;visibleAnswer=false;$('answerArea').classList.add('refhide');$('toggleAnswer').textContent='模範解答を表示';[...nums.children].forEach((b,i)=>b.classList.toggle('active',i+1===q));$('qtitle').textContent='No.'+q;$('sourceLabel').textContent='No.'+q;updateButtons();paint();showImages()}
+for(let n=1;n<=13;n++){let b=document.createElement('button');b.type='button';b.textContent=n;b.setAttribute('aria-label','公表問題No.'+n);b.addEventListener('click',()=>choose(n));nums.appendChild(b)}
+const palette=$('stampPalette');
+for(const [type,label] of STAMPS){const b=document.createElement('button');b.className='btn';b.textContent=label;b.dataset.stamp=type;b.onclick=()=>{stampType=type;setMode('place');$('stampDetails').open=true;updatePalette()};palette.appendChild(b)}
+function updatePalette(){palette.querySelectorAll('button').forEach(b=>b.classList.toggle('selected',b.dataset.stamp===stampType&&mode==='place'))}
+function setMode(m){finishActive();mode=m;['draw','place','move'].forEach(k=>{$('tool'+k[0].toUpperCase()+k.slice(1)).classList.toggle('selected',m===k)});$('toolDraw').classList.toggle('primary',m==='draw');$('toolPlace').classList.toggle('primary',m==='place');$('toolMove').classList.toggle('primary',m==='move');updatePalette();updateButtons();paint()}
+$('toolDraw').onclick=()=>setMode('draw');$('toolPlace').onclick=()=>setMode('place');$('toolMove').onclick=()=>setMode('move');
+function dims(){let r=canvas.getBoundingClientRect();return {w:r.width,h:r.height}}
+function renderStroke(s,w,h){const a=s.points;if(!a?.length)return;ctx.save();ctx.lineCap='round';ctx.lineJoin='round';ctx.strokeStyle=s.color;ctx.fillStyle=s.color;ctx.lineWidth=s.width;ctx.beginPath();ctx.moveTo(a[0].x*w,a[0].y*h);if(a.length===1){ctx.arc(a[0].x*w,a[0].y*h,s.width/2,0,Math.PI*2);ctx.fill()}else{for(let i=1;i<a.length;i++)ctx.lineTo(a[i].x*w,a[i].y*h);ctx.stroke()}ctx.restore()}
+function isLarge(type){return type==='box'||type==='joint'}
+function symbol(ctx,type){
+ctx.strokeStyle='#142235';ctx.fillStyle='#142235';ctx.lineWidth=2.1;ctx.lineCap='round';ctx.lineJoin='round';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+const line=(x,y,a,b)=>{ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(a,b);ctx.stroke()};
+const circle=(x,y,r)=>{ctx.beginPath();ctx.arc(x,y,r,0,Math.PI*2);ctx.stroke()};
+const rect=(x,y,w,h)=>ctx.strokeRect(x,y,w,h);
+const dot=(x,y)=>{ctx.beginPath();ctx.arc(x,y,2.5,0,Math.PI*2);ctx.fill()};
+const txt=(v,x,y,font='bold 11px sans-serif')=>{ctx.font=font;ctx.fillText(v,x,y)};
+switch(type){
+case 'outlet':{
+  // HOZAN-style receptacle plan symbol: outlined circle, black lower half,
+  // and two short parallel vertical bars in the upper half. W at right.
+  circle(-3,0,18);
+  ctx.beginPath();ctx.moveTo(-21,0);ctx.arc(-3,0,18,Math.PI,0,true);ctx.closePath();ctx.fill();
+  ctx.lineWidth=2.8;line(-9,-13,-9,-4);line(3,-13,3,-4);
+  txt('W',23,0,'bold 12px sans-serif');break;
+}
+case 'outlet2':{ // For already saved older drawings; no longer offered in the palette.
+  circle(0,0,20);txt('2',0,0);break;
+}
+case 'lamp':circle(0,0,20);txt('R',0,1,'bold 18px sans-serif');break;
+case 'ceiling':{
+  circle(0,0,22);ctx.lineWidth=2.5;
+  ctx.save();ctx.rotate(Math.PI/2);
+  ctx.beginPath();ctx.arc(0,0,11,Math.PI*.13,Math.PI*.87);ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,11,Math.PI*1.13,Math.PI*1.87);ctx.stroke();ctx.restore();
+  break;
+}
+case 'ceilingSquare':{
+  rect(-23,-19,46,38);
+  ctx.save();ctx.rotate(Math.PI/2);
+  ctx.beginPath();ctx.arc(0,0,12,Math.PI*.14,Math.PI*.86);ctx.stroke();
+  ctx.beginPath();ctx.arc(0,0,12,Math.PI*1.14,Math.PI*1.86);ctx.stroke();ctx.restore();break;
+}
+case 'switch':rect(-19,-18,38,36);dot(-11,8);dot(11,8);line(-11,8,9,-8);break;
+case 'three':{
+  rect(-28,-24,56,48);ctx.lineWidth=1.6;
+  circle(-17,0,3.2);circle(17,-13,3.2);circle(17,13,3.2);line(-14,0,13,-12);
+  txt('1',-17,13,'bold 10px sans-serif');txt('2',6,-17,'bold 10px sans-serif');txt('3',7,17,'bold 10px sans-serif');break;
+}
+case 'four':{
+  rect(-30,-26,60,52);ctx.lineWidth=1.5;
+  circle(-18,-13,3);circle(-18,13,3);circle(18,-13,3);circle(18,13,3);
+  line(-14,-11,14,11);line(-14,11,14,-11);
+  txt('1',-26,-21,'bold 9px sans-serif');txt('2',-26,21,'bold 9px sans-serif');
+  txt('3',26,-21,'bold 9px sans-serif');txt('4',26,21,'bold 9px sans-serif');break;
+}
+case 'pilot':circle(0,0,18);txt('PL',0,1,'bold 12px sans-serif');break;
+case 'timer':rect(-23,-21,46,42);txt('TS',0,0);break;
+case 'breaker':rect(-21,-21,42,42);txt('B',0,1,'bold 22px sans-serif');break;
+case 'terminal':rect(-24,-20,48,40);for(let x of [-13,0,13]){circle(x,0,4);line(x,-20,x,-5);line(x,5,x,20)}break;
+case 'box':{
+  ctx.lineWidth=2.5;rect(-84,-84,168,168);break;
+}
+case 'joint':{
+  ctx.lineWidth=2.7;ctx.setLineDash([8,7]);circle(0,0,84);ctx.setLineDash([]);break;
+}
+}}
+function stampDraw(s,w,h,mark=true){
+const x=s.x*w,y=s.y*h,large=isLarge(s.stamp),r=(large?84:54.6)*stampScale();
+ctx.save();ctx.translate(x,y);ctx.rotate((s.rot||0)*Math.PI/180);ctx.scale(stampScale()*(large?1:1.3),stampScale()*(large?1:1.3));
+// No background block: wires can pass visibly through and within each symbol.
+symbol(ctx,s.stamp);ctx.restore();
+if(mark&&mode==='move'&&selectedId===s.id){ctx.save();ctx.strokeStyle='#2760d2';ctx.setLineDash([5,3]);ctx.strokeRect(x-r-5,y-r-5,(r+5)*2,(r+5)*2);ctx.restore()}
+}
+function paint(){const {w,h}=dims();if(!w||!h)return;const d=Math.min(devicePixelRatio||1,3);canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle='#a9b5c3';ctx.fillRect(0,0,w,h);for(const s of state[q-1].items){if(s.type==='stamp')stampDraw(s,w,h);else renderStroke(s,w,h)}if(current)renderStroke(current,w,h);updateStampControls()}
+function point(e){const r=canvas.getBoundingClientRect();return {x:Math.min(1,Math.max(0,(e.clientX-r.left)/r.width)),y:Math.min(1,Math.max(0,(e.clientY-r.top)/r.height))}}
+function hit(p){const {w,h}=dims();return [...state[q-1].items].reverse().find(s=>s.type==='stamp'&&Math.abs((s.x-p.x)*w)<(isLarge(s.stamp)?88:55)*stampScale()&&Math.abs((s.y-p.y)*h)<(isLarge(s.stamp)?88:55)*stampScale())}
+function start(e){if(!$('drawMode').checked||(e.pointerType==='mouse'&&e.button!==0)||pid!==null)return;e.preventDefault();pid=e.pointerId;try{canvas.setPointerCapture(pid)}catch{}const p=point(e);if(mode==='draw'){current={type:'stroke',color:erasing?'#a9b5c3':color,width:erasing?30:size,points:[p]};paint()}else if(mode==='place'){remember();const s={type:'stamp',id:'s'+Date.now()+Math.random().toString(36).slice(2),stamp:stampType,x:p.x,y:p.y,rot:0};state[q-1].items.push(s);selectedId=s.id;refresh()}else{const s=hit(p);selectedId=s?.id||null;drag=s?{id:s.id,x:s.x,y:s.y,start:p,changed:false}:null;paint()}}
+function move(e){if(e.pointerId!==pid)return;e.preventDefault();const p=point(e);if(mode==='draw'&&current){current.points.push(p);paint()}else if(mode==='move'&&drag){const s=state[q-1].items.find(s=>s.id===drag.id);if(!s)return;const dx=p.x-drag.start.x,dy=p.y-drag.start.y;if(!drag.changed&&Math.hypot(dx*dims().w,dy*dims().h)>3){remember();drag.changed=true}if(drag.changed){s.x=Math.max(0,Math.min(1,drag.x+dx));s.y=Math.max(0,Math.min(1,drag.y+dy));paint()}}}
+function end(e){if(e.pointerId!==pid)return;e.preventDefault();if(mode==='draw'&&current){current.points.push(point(e));finishActive()}if(drag?.changed)refresh();drag=null;pid=null;paint()}
+function finishActive(){if(!current)return;remember();state[q-1].items.push(current);current=null;pid=null;refresh()}
+canvas.addEventListener('pointerdown',start,{passive:false});canvas.addEventListener('pointermove',move,{passive:false});canvas.addEventListener('pointerup',end,{passive:false});canvas.addEventListener('pointercancel',end,{passive:false});canvas.addEventListener('touchmove',e=>{if($('drawMode').checked)e.preventDefault()},{passive:false});
+function updateStampControls(){const s=state[q-1].items.find(x=>x.id===selectedId&&x.type==='stamp');$('rotateStamp').disabled=!s;$('deleteStamp').disabled=!s;$('selectedStamp').textContent=s?('選択：'+STAMPS.find(v=>v[0]===s.stamp)?.[1]):'記号未選択'}
+function updateButtons(){const s=state[q-1];$('undo').disabled=!s.undo.length;$('redo').disabled=!s.redo.length;updateStampControls()}
+$('rotateStamp').onclick=()=>{const s=state[q-1].items.find(x=>x.id===selectedId);if(!s)return;remember();s.rot=((s.rot||0)+90)%360;refresh()};
+$('deleteStamp').onclick=()=>{const i=state[q-1].items.findIndex(x=>x.id===selectedId);if(i===-1)return;remember();state[q-1].items.splice(i,1);selectedId=null;refresh()};
+$('undo').onclick=()=>{finishActive();const s=state[q-1];if(!s.undo.length)return;s.redo.push(snapshot());s.items=s.undo.pop();selectedId=null;refresh()};
+$('redo').onclick=()=>{finishActive();const s=state[q-1];if(!s.redo.length)return;s.undo.push(snapshot());s.items=s.redo.pop();selectedId=null;refresh()};
+$('clear').onclick=()=>{
+  // Clear the entire current drawing surface, including every stamp and stroke.
+  // Avoid confirm(): embedded viewers and mobile browsers may block dialogs.
+  const s=state[q-1];
+  if(!s.items.length&&!current)return;
+  if(current){s.items.push(current);current=null;}
+  remember();
+  s.items=[];
+  selectedId=null;drag=null;pid=null;
+  refresh();
+  $('saveStatus').textContent=`✓ No.${q} の線とスタンプを全消去しました。取り消す場合は「一つ戻す」。`;
+};
+$('drawMode').onchange=()=>{finishActive();box.classList.toggle('scroll',!$('drawMode').checked)};
+function sel(btn){document.querySelectorAll('#tools .swatch, #eraser').forEach(b=>b.classList.remove('selected'));btn.classList.add('selected')}
+document.querySelectorAll('[data-color]').forEach(b=>b.onclick=()=>{color=b.dataset.color;erasing=false;sel(b);setMode('draw')});$('eraser').onclick=()=>{erasing=true;sel($('eraser'));setMode('draw')};$('thickness').oninput=e=>size=+e.target.value;
+$('savePNG').onclick=()=>{finishActive();const off=document.createElement('canvas');off.width=canvas.width;off.height=canvas.height;off.getContext('2d').drawImage(canvas,0,0);off.toBlob(blob=>{if(!blob)return;let url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`denko2_2026_no${String(q).padStart(2,'0')}_fukusenzu.png`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),15000)},'image/png')};
+$('toggleAnswer').onclick=()=>{visibleAnswer=!visibleAnswer;$('answerArea').classList.toggle('refhide',!visibleAnswer);$('toggleAnswer').textContent=visibleAnswer?'模範解答を隠す':'模範解答を表示'};
+const MAX_IMAGE_BYTES=10*1024*1024;
+async function verifyImage(file){
+  if(file.size>MAX_IMAGE_BYTES)throw new Error('画像は1枚10MB以下にしてください。');
+  if(!['image/jpeg','image/png'].includes(file.type))throw new Error('JPEG（JPG）かPNG形式の画像のみ登録できます。');
+  const bytes=new Uint8Array(await file.slice(0,12).arrayBuffer());
+  const jpeg=bytes.length>=3&&bytes[0]===0xff&&bytes[1]===0xd8&&bytes[2]===0xff;
+  const png=bytes.length>=8&&[137,80,78,71,13,10,26,10].every((b,i)=>bytes[i]===b);
+  if(!((file.type==='image/jpeg'&&jpeg)||(file.type==='image/png'&&png)))throw new Error('画像の内容とファイル形式が一致しません。');
+  const url=URL.createObjectURL(file);
+  try{
+    const img=new Image();
+    await new Promise((resolve,reject)=>{img.onload=resolve;img.onerror=()=>reject(new Error('画像として読み込めません。'));img.src=url});
+    if(!img.naturalWidth||!img.naturalHeight||img.naturalWidth*img.naturalHeight>24000000)throw new Error('画像の縦横サイズが大きすぎます（最大2400万画素）。');
+    const c=document.createElement('canvas');c.width=img.naturalWidth;c.height=img.naturalHeight;
+    const cx=c.getContext('2d');if(!cx)throw new Error('画像を処理できません。');
+    cx.fillStyle='#fff';cx.fillRect(0,0,c.width,c.height);cx.drawImage(img,0,0);
+    return c.toDataURL('image/png');
+  }finally{URL.revokeObjectURL(url)}
+}
+async function upload(type,e){
+  const file=e.target.files?.[0];if(!file)return;
+  const target=q;e.target.value='';
+  try{
+    const data=await verifyImage(file);
+    const ok=await dbPut(imgKey(type,target),data);
+    if(!ok)throw new Error('画像を保存できませんでした。Safariの通常タブで開くか保存容量を確認してください。');
+    if(q===target)showImages();
+  }catch(err){alert(err.message||'画像を登録できませんでした。')}
+}
+$('sourceFile').onchange=e=>upload('source',e);$('answerFile').onchange=e=>upload('answer',e);$('removeSource').onclick=async()=>{if(confirm(`No.${q}の単線図画像を削除しますか？`)){await dbDelete(imgKey('source',q));showImages()}};$('removeAnswer').onclick=async()=>{if(confirm(`No.${q}の模範複線図画像を削除しますか？`)){await dbDelete(imgKey('answer',q));showImages()}};
+window.addEventListener('resize',paint);if('ResizeObserver'in window)new ResizeObserver(paint).observe(box);initDB().then(v=>{db=v;choose(1)});
+})();
+</script></body></html>
